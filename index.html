@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Itália, novembro 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E8ECE9; --surface:#FFFFFF; --surface-2:#F3F5F3; --ink:#17221E; --muted:#5B6A64;
+  --line:#CBD3CF; --pine:#1D4A3B; --pine-ink:#FFFFFF; --ochre:#C98A12; --ochre-soft:#F6E7C4; --alert:#A3341F; --mast:#1D4A3B;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1915; --surface:#17241F; --surface-2:#1E2E28; --ink:#E7EEEA; --muted:#9AAAA3;
+    --line:#2C3E37; --pine:#5FA88C; --pine-ink:#0F1915; --ochre:#E7B04A; --ochre-soft:#3A2F17; --alert:#E58A72; --mast:#163A2E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1915; --surface:#17241F; --surface-2:#1E2E28; --ink:#E7EEEA; --muted:#9AAAA3;
+  --line:#2C3E37; --pine:#5FA88C; --pine-ink:#0F1915; --ochre:#E7B04A; --ochre-soft:#3A2F17; --alert:#E58A72; --mast:#163A2E;
+  color-scheme: dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 120px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--mast)}
+button{font:inherit;color:inherit}
+a{color:var(--pine)}
+:focus-visible{outline:3px solid var(--ochre);outline-offset:2px;border-radius:6px}
+
+/* masthead */
+.mast{background:var(--mast);color:#FFFFFF;padding:22px 20px 18px}
+.mast-in{max-width:760px;margin:0 auto}
+.mast h1{font-stretch:125%;font-weight:800;font-size:clamp(30px,8vw,46px);line-height:1;margin:0;letter-spacing:-.01em}
+.mast p{margin:8px 0 0;font-stretch:90%;opacity:.85}
+.status{margin-top:16px;background:rgba(255,255,255,.12);border-radius:12px;padding:12px 14px;font-stretch:95%}
+:root[data-theme="dark"] .status{background:rgba(0,0,0,.18)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .status{background:rgba(0,0,0,.18)}}
+.status b{font-weight:700}
+
+/* sticky nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs{max-width:760px;margin:0 auto;display:flex;gap:4px;padding:10px 16px 0}
+.tab{flex:1;background:none;border:0;padding:8px 6px 10px;font-weight:600;font-stretch:95%;color:var(--muted);border-bottom:3px solid transparent;cursor:pointer}
+.tab[aria-selected="true"]{color:var(--ink);border-color:var(--ochre)}
+.days{max-width:760px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:10px 16px 12px;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.dchip{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 10px;text-align:center;cursor:pointer;min-width:52px}
+.dchip span{display:block;font-size:11px;color:var(--muted);font-stretch:85%}
+.dchip strong{display:block;font-size:18px;font-stretch:110%;line-height:1.1}
+.dchip.today{border-color:var(--ochre);box-shadow:inset 0 -3px 0 var(--ochre)}
+.dchip.city-it strong{color:var(--pine)}
+
+main{max-width:760px;margin:0 auto;padding:8px 16px 60px}
+.view[hidden]{display:none}
+
+/* timeline */
+.day{margin-top:26px}
+.dayhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 10px}
+.dayhead h2{margin:0;font-stretch:120%;font-weight:800;font-size:24px;letter-spacing:-.01em}
+.dayhead .where{color:var(--muted);font-stretch:90%}
+.dayhead .now-badge{background:var(--ochre);color:#1a1405;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px}
+.items{list-style:none;margin:0;padding:0;position:relative}
+.items::before{content:"";position:absolute;left:58px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.item{display:grid;grid-template-columns:48px 22px 1fr;column-gap:10px;align-items:start;padding:6px 0}
+.time{font-stretch:80%;font-weight:700;text-align:right;padding-top:12px;font-variant-numeric:tabular-nums;font-size:15px}
+.time small{display:block;font-weight:500;color:var(--muted);font-size:11px}
+.dot{width:22px;height:22px;border-radius:50%;background:var(--surface);border:2px solid var(--line);margin-top:11px;position:relative;z-index:1;display:grid;place-items:center}
+.item.key .dot{border-color:var(--pine);background:var(--pine)}
+.item.key .dot svg{stroke:var(--pine-ink)}
+.dot svg{width:12px;height:12px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-align:left;width:100%;cursor:pointer;display:block}
+.card:hover{border-color:var(--pine)}
+.item.key .card{border-left:4px solid var(--pine)}
+.item.choice .card{border-style:dashed}
+.card .k{font-size:12px;color:var(--muted);font-stretch:90%}
+.card h3{margin:2px 0 0;font-size:17px;font-weight:700;line-height:1.25}
+.card p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-stretch:80%;font-weight:700;font-size:13px;background:var(--ochre-soft);color:var(--ink);padding:3px 8px;border-radius:6px;letter-spacing:.02em}
+.item.next .card{outline:2px solid var(--ochre);outline-offset:2px}
+
+.contacts{margin-top:26px}
+.contacts dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0}
+.contacts dt{font-weight:700}
+.contacts dd{margin:0;color:var(--muted)}
+
+/* sheet */
+.sheet-bg{position:fixed;inset:0;background:rgba(10,18,15,.55);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet-bg[hidden]{display:none}
+.sheet{background:var(--surface);width:100%;max-width:640px;max-height:88vh;overflow-y:auto;border-radius:18px 18px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+@media (min-width:700px){.sheet-bg{align-items:center}.sheet{border-radius:18px;max-height:84vh}}
+.sheet .x{float:right;background:var(--surface-2);border:0;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:18px}
+.sheet .k{color:var(--muted);font-size:13px;font-stretch:90%}
+.sheet h3{margin:4px 0 10px;font-stretch:110%;font-size:22px;line-height:1.2}
+.sheet .row{display:grid;grid-template-columns:120px 1fr;gap:4px 12px;padding:8px 0;border-top:1px solid var(--line);font-size:15px}
+.sheet .row dt{color:var(--muted)}
+.sheet .row dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.sheet .row dd.code{font-stretch:75%;font-size:20px;font-weight:800;letter-spacing:.04em}
+.sheet ul.notes{padding-left:18px;margin:12px 0 0}
+.sheet ul.notes li{margin-bottom:6px}
+.sheet .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.warn{background:var(--ochre-soft);border-radius:10px;padding:10px 12px;margin-top:12px;font-size:14px}
+
+.foot{color:var(--muted);font-size:13px;margin-top:34px;border-top:1px solid var(--line);padding-top:14px}
+@media (prefers-reduced-motion: no-preference){.sheet{animation:up .22s ease-out}@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}}
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="mast-in">
+    <h1>Itália, novembro</h1>
+    <p>Carlos e Tatiane, de 8 a 22 de novembro de 2026</p>
+    <div class="status" id="status" aria-live="polite"></div>
+  </div>
+</header>
+
+<div class="nav">
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-view="roteiro">Roteiro</button>
+    <button class="tab" role="tab" aria-selected="false" data-view="pendencias">Contatos</button>
+  </div>
+  <div class="days" id="days" aria-label="Ir para o dia"></div>
+</div>
+
+<main>
+  <section class="view" id="v-roteiro"></section>
+  <section class="view todo" id="v-pendencias" hidden>
+    <div class="contacts">
+      <h2>Contatos</h2>
+      <dl>
+        <dt>LATAM</dt><dd>0300 570 5700</dd>
+        <dt>Museus Vaticanos</dt><dd>+39 06 698 84341</dd>
+        <dt>NH de La Gare</dt><dd>+39 051 281611</dd>
+        <dt>UNAHOTELS Deco</dt><dd>+39 06 649371</dd>
+      </dl>
+    </div>
+  </section>
+  <p class="foot">Horários locais: Brasil (UTC−3) e Itália (UTC+1). Roteiro para os amigos de viagem. Detalhes de reservas ficam com cada um.</p>
+</main>
+
+<div class="sheet-bg" id="sheetBg" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" id="sheet"></div>
+</div>
+
+<script>
+
+const I = {
+  plane:'<path d="M2 16l20-6-20-6 4 6-4 6z"/>',
+  bed:'<path d="M3 18V7M3 13h18v5M7 13V10h6a3 3 0 0 1 3 3"/>',
+  train:'<rect x="5" y="3" width="14" height="13" rx="3"/><path d="M8 20l-2 2M16 20l2 2M5 11h14"/>',
+  car:'<path d="M3 16v-4l2-5h14l2 5v4H3z"/><circle cx="7" cy="17" r="1.5"/><circle cx="17" cy="17" r="1.5"/>',
+  ticket:'<path d="M3 8a2 2 0 0 0 0 8v3h18v-3a2 2 0 0 1 0-8V5H3z"/>',
+  walk:'<circle cx="13" cy="4" r="2"/><path d="M9 21l3-8 3 3v5M8 12l3-4 4 2 3 1"/>',
+  star:'<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>',
+  food:'<path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 3c-2 2-2 6 0 8v10"/>',
+  home:'<path d="M3 11l9-8 9 8v10H3z"/>',
+  taxi:'<path d="M3 16v-4l2-5h14l2 5v4H3z"/><path d="M9 7l1-3h4l1 3"/>'
+};
+const ic = n => '<svg viewBox="0 0 24 24" aria-hidden="true">'+I[n]+'</svg>';
+const maps = q => 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+
+const DAYS = [{"d":"2026-11-08","w":"Dom","n":"8","where":"São Paulo → Roma","br":true,"items":[{"t":"13:30","i":"home","title":"Saída de casa para Guarulhos","sub":"Vila Madalena → GRU, de 50 min a 1h15 num domingo","notes":["Chegar ao aeroporto por volta das 14h50, 3 horas antes do voo.","Levar passaportes e a PID de quem for dirigir."]},{"t":"17:50","i":"plane","key":true,"title":"Voo LA 8120 · GRU → Roma Fiumicino","sub":"Chega segunda, 9/11, às 09:10","rows":[["Cabine","Economy Full"],["Bagagem","1 mala de 23 kg despachada, 1 de 12 kg na cabine e 1 item pessoal, por pessoa"],["Terminal","Guarulhos, Terminal 3"]],"notes":["Fazer o check-in online no site ou app da LATAM até 24h antes."]}]},{"d":"2026-11-09","w":"Seg","n":"9","where":"Roma","items":[{"t":"09:10","i":"plane","title":"Chegada a Fiumicino","sub":"Imigração (Schengen) e bagagem, cerca de 1 hora"},{"t":"10:15","i":"taxi","title":"Táxi oficial até o hotel","sub":"Tarifa fixa de €55 ou taxímetro (€45–60)","notes":["Pegar só na fila oficial de táxis brancos, na saída do desembarque.","Antes de entrar, perguntar: “Tariffa fissa, 55 euro?”. Se for pelo taxímetro, conferir se foi ligado.","Alternativa econômica: ônibus SIT até a Via Crescenzio, a poucas quadras do hotel."]},{"t":"11:30","i":"bed","key":true,"title":"Le Méridien Visconti Rome","sub":"7 noites · Deluxe King · café incluso","rows":[["Endereço","Via Federico Cesi, 37 · Prati"],["Estadia","9 a 16 nov · 7 noites · 2 adultos"]],"notes":["Mostrar a identificação Marriott Bonvoy no check-in, senão a tarifa com café não vale.","Pedido de quarto para não fumantes não está garantido: reforçar no balcão.","Chegando de manhã, deixar as malas e voltar para o check-in à tarde."],"links":[["Abrir no mapa","https://www.google.com/maps/search/?api=1&query=Le%20M%C3%A9ridien%20Visconti%20Rome%2C%20Via%20Federico%20Cesi%2037"]]},{"t":"Tarde","i":"walk","choice":true,"title":"Escolher: Via Ápia ou passeio leve","sub":"A: Via Ápia e catacumbas · B: Pincio, San Carlo al Corso e Pompi","notes":["A: táxi de 20–25 min até a Via Ápia. San Callisto e San Sebastiano abrem às segundas.","B: Pincio ao pôr do sol (~16h50) → Piazza del Popolo → San Carlo al Corso (coração de São Carlos Borromeu) → Pompi, Via della Croce 82 → Piazza di Spagna."]}]},{"d":"2026-11-10","w":"Ter","n":"10","where":"Roma · centro barroco","items":[{"t":"Manhã","i":"walk","title":"Campo de’ Fiori → Piazza Navona","sub":"Mercado no Campo de’ Fiori pela manhã"},{"t":"","i":"walk","title":"Sant’Agostino e Biblioteca Angelica","sub":"Caravaggio na igreja · Salão Vanvitelliano em dia útil","notes":["Na biblioteca, ficar perto da porta e em silêncio."]},{"t":"","i":"walk","title":"San Luigi dei Francesi","sub":"Ciclo de São Mateus, de Caravaggio"},{"t":"Almoço","i":"food","title":"Two Sizes","sub":"Tiramisù · Via del Governo Vecchio, 88","links":[["Abrir no mapa","https://www.google.com/maps/search/?api=1&query=Two%20Sizes%2C%20Via%20del%20Governo%20Vecchio%2088%2C%20Roma"]]},{"t":"","i":"walk","title":"Pantheon → Santo Inácio","sub":"No Santo Inácio, usar o espelho no meio da nave para ver o teto","notes":["Pantheon com entrada paga (cerca de €5)."]},{"t":"Tarde","i":"walk","title":"Fontana di Trevi → Vicus Caprarius","sub":"Área arqueológica sob a Trevi · reservar a visita","links":[["Abrir no mapa","https://www.google.com/maps/search/?api=1&query=Vicus%20Caprarius%2C%20Vicolo%20del%20Puttarello%2025%2C%20Roma"]]}]},{"d":"2026-11-11","w":"Qua","n":"11","where":"Roma · dia das relíquias","items":[{"t":"08:00","i":"walk","title":"San Pietro in Vincoli","sub":"Moisés de Michelangelo e as correntes de São Pedro","notes":["Chegar cedo: costuma fechar na hora do almoço."]},{"t":"","i":"walk","title":"San Martino ai Monti → Santa Prassede","sub":"Coluna da flagelação em Santa Prassede"},{"t":"Almoço","i":"walk","title":"Santa Maria Maggiore","sub":"Relíquia do presépio de Belém · aberta o dia todo"},{"t":"Tarde","i":"walk","title":"Scala Santa → Latrão → Santa Croce","sub":"Escada de Pôncio Pilatos, relicários de Pedro e Paulo, relíquias da Paixão","notes":["Na Scala Santa, sobe-se de joelhos. Há escadas laterais para visitar a pé.","Se ficar pesado, Santa Croce pode sair do dia."]}]},{"d":"2026-11-12","w":"Qui","n":"12","where":"Roma · Vaticano","items":[{"t":"08:30","i":"ticket","key":true,"title":"Museus Vaticanos","sub":"Entrada pelo Corredor 1 · fila de reservas, à direita","rows":[["Entrada","Viale Vaticano · Corridoio 1"]],"notes":["Levar documento com foto: os funcionários validam o ingresso antes da catraca.","Sem essa validação, a catraca não libera.","Ingresso não reembolsável e válido só para este horário."],"links":[["Abrir no mapa","https://www.google.com/maps/search/?api=1&query=Musei%20Vaticani%2C%20Viale%20Vaticano%2C%20Roma"]]},{"t":"Tarde","i":"walk","title":"Basílica de São Pedro","sub":"Ombros e joelhos cobertos"},{"t":"","i":"walk","title":"Castel Sant’Angelo e Ponte Sant’Angelo","sub":"Perto do hotel"}]},{"d":"2026-11-13","w":"Sex","n":"13","where":"Roma · DeRose Experience","items":[{"t":"10:00","i":"walk","choice":true,"title":"Escolher: Discovering Rome ou Capitolinos","sub":"Tour opcional do evento (10h–13h, inscrição prévia) ou Museus Capitolinos"},{"t":"15:30","i":"star","key":true,"title":"DeRose Experience · sessões","sub":"15h30 Focus · 16h45 Strength · 18h The World’s Last Matriarchies","notes":["Local: Studio DOVE, em Prati."]},{"t":"19:00","i":"food","title":"Jantar livre","sub":"Se escolheram a opção A na segunda: Pompi e San Carlo al Corso aqui"},{"t":"22:00","i":"star","key":true,"title":"Noite cultural e lançamento dos livros","sub":"Dois Amigos, Um Caminho e Amare è un’arte, lasciarsi ne fa parte"}]},{"d":"2026-11-14","w":"Sáb","n":"14","where":"Roma · DeRose Experience","items":[{"t":"09:00","i":"star","key":true,"title":"Sessões da manhã","sub":"9h Isometrics · 10h45 The Secret of Change · 12h DeRose Method Techniques"},{"t":"13:00","i":"food","title":"Almoço em Prati","sub":"Pompi da Piazza del Risorgimento, 43, fica perto"},{"t":"15:00","i":"star","key":true,"title":"Sessões da tarde","sub":"15h Emotions at the Surface · 16h15 curso com o Prof. DeRose"},{"t":"20:30","i":"food","key":true,"title":"Jantar da comunidade"}]},{"d":"2026-11-15","w":"Dom","n":"15","where":"Roma · DeRose Experience","items":[{"t":"09:00","i":"star","key":true,"title":"Sessões da manhã","sub":"9h Asthánga Sádhana · 10h45 Plant-Based Living · 12h Paradigms"},{"t":"13:00","i":"food","title":"Almoço"},{"t":"15:00","i":"star","key":true,"title":"Curso de meditação com o Prof. DeRose","sub":"17h30 Círculo de Mentalização · 18h30 encerramento"}]},{"d":"2026-11-16","w":"Seg","n":"16","where":"Roma → Arezzo → Bologna","items":[{"t":"09:00","i":"walk","choice":true,"title":"Cripta dos Capuchinhos (opcional)","sub":"Via Veneto, 27 · confirmar se abre às 9h"},{"t":"Manhã","i":"bed","title":"Check-out do Le Méridien","sub":"Táxi com as malas até a Via Veneto"},{"t":"10:00","i":"car","key":true,"title":"Retirada do carro · Hertz Via Veneto","sub":"Mercedes-Benz GLC · devolução em Fiumicino, 20/11, 23:30","rows":[["Categoria","Premium SUV · Mercedes-Benz GLC com GPS"],["Retirada","Rome City Centre, Via Veneto · 16/11 · 10:00"],["Devolução","Rome Fiumicino Airport · 20/11 · 23:30"]],"notes":["Levar CNH, passaporte e PID. Cartão de crédito no nome da motorista principal.","Quem mais for dirigir precisa ser incluído como condutor adicional.","GPS configurado para evitar ZTL. Sair pelas avenidas grandes rumo à A1."],"links":[["Abrir no mapa","https://www.google.com/maps/search/?api=1&query=Hertz%20Via%20Veneto%20Roma"]]},{"t":"12:30","i":"walk","title":"Arezzo · almoço e passeio","sub":"Pedágio Roma → Arezzo: €15,40","notes":["Deixar o GLC em estacionamento fora dos muros e entrar a pé."]},{"t":"15:30","i":"bed","key":true,"title":"NH de La Gare · Bologna","sub":"5 noites · Deluxe · café incluso","rows":[["Endereço","Piazza XX Settembre, 2 · em frente à estação"],["Estadia","16 a 21 nov · 5 noites"],["Pagar no hotel","Taxa municipal de €50"]],"notes":["Estacionamento: Garage Autostazione, Piazza XX Settembre, 6, cerca de €20/dia.","Chegar pelos viali (anel viário), sem cortar o centro: ZTL com câmeras.","Pedir ao hotel ou à garagem para registrar a placa.","Confirmar com a Perfil Viagens o prazo de cancelamento."],"links":[["Abrir no mapa","https://www.google.com/maps/search/?api=1&query=NH%20Bologna%20de%20la%20Gare%2C%20Piazza%20XX%20Settembre%202%2C%20Bologna"]]}]},{"d":"2026-11-17","w":"Ter","n":"17","where":"Bologna · passeio de carro","items":[{"t":"Dia","i":"car","choice":true,"title":"A definir: Modena, Verona ou Monza","sub":"Pedágios ida e volta: Modena ~€4 · Verona ~€19 · Monza ~€38"}]},{"d":"2026-11-18","w":"Qua","n":"18","where":"Bologna · passeio de carro","items":[{"t":"Dia","i":"car","choice":true,"title":"A definir","sub":"Outra das cidades da lista"}]},{"d":"2026-11-19","w":"Qui","n":"19","where":"Bologna · passeio de carro","items":[{"t":"Dia","i":"car","choice":true,"title":"A definir","sub":"Último dia com carro"}]},{"d":"2026-11-20","w":"Sex","n":"20","where":"Bologna · sem carro","items":[{"t":"Manhã","i":"car","title":"Amigos voltam para Roma com o carro","sub":"Devolução em Fiumicino às 23:30"},{"t":"Dia","i":"walk","title":"Bologna, Castel Maggiore e San Lazzaro","sub":"De trem regional ou ônibus"}]},{"d":"2026-11-21","w":"Sáb","n":"21","where":"Bologna → Roma","items":[{"t":"12:00","i":"bed","title":"Check-out do NH","sub":"Deixar as malas guardadas até a hora do trem"},{"t":"15:17","i":"train","key":true,"title":"Italo 8959 · Bologna Centrale → Roma Termini","sub":"Chega 17:40 · Prima Business · vagão 3, assentos 9 e 10","rows":[["Trem","8959 · 15:17 → 17:40"],["Ambiente","Prima Business · Low Cost"]],"notes":["As portas fecham 2 minutos antes da partida.","Os trens de alta velocidade saem do subsolo da Bologna Centrale: contar uns 10 minutos de caminhada.","Inclui Fast Track na estação e bebida e snack servidos no assento."]},{"t":"18:00","i":"bed","key":true,"title":"UNAHOTELS Deco Roma","sub":"1 noite · Superior · café incluso · 5 min a pé de Termini","rows":[["Endereço","Via Giovanni Amendola, 57"],["Check-in","A partir das 14h · check-out ao meio-dia"],["Pagar no hotel","Taxa municipal de €15"]],"links":[["Abrir no mapa","https://www.google.com/maps/search/?api=1&query=UNAHOTELS%20Deco%20Roma%2C%20Via%20Giovanni%20Amendola%2057"]]},{"t":"20:00","i":"food","title":"Jantar · L’Antica Pizzeria da Michele","sub":"1º andar da estação Roma Termini"}]},{"d":"2026-11-22","w":"Dom","n":"22","where":"Roma → São Paulo","br":false,"items":[{"t":"08:00","i":"train","title":"Leonardo Express · Termini → Fiumicino","sub":"€14 por pessoa · 32 min · a cada 15 min","notes":["Comprar no app da Trenitalia ou nas máquinas da estação."]},{"t":"12:10","i":"plane","key":true,"title":"Voo LA 8121 · Fiumicino → GRU","sub":"Chega às 20:10 em Guarulhos","rows":[["Cabine","Economy Full"],["Bagagem","1 mala de 23 kg despachada, 1 de 12 kg na cabine e 1 item pessoal, por pessoa"]],"notes":["Chegar a Fiumicino por volta das 9h: voo para fora do espaço Schengen, com controle de passaporte."]},{"t":"22:15","i":"home","title":"Em casa, na Vila Madalena","sub":"Horário de Brasília"}]}];
+
+const store = {
+  get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function romeToday(){
+  try{
+    const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Rome',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+    return p;
+  }catch(e){return new Date().toISOString().slice(0,10)}
+}
+const TODAY = romeToday();
+
+function renderStatus(){
+  const el=document.getElementById('status');
+  const start=new Date('2026-11-08T13:30:00-03:00'), now=new Date();
+  const first=DAYS[0].d,last=DAYS[DAYS.length-1].d;
+  if(TODAY<first){
+    const days=Math.ceil((start-now)/86400000);
+    el.innerHTML='<b>Faltam '+days+' dias.</b> Saída de casa no domingo, 8/11, às 13h30. Voo LA 8120 às 17h50.';
+  }else if(TODAY>last){
+    el.innerHTML='<b>Viagem concluída.</b> Bem-vindos de volta.';
+  }else{
+    const day=DAYS.find(x=>x.d===TODAY);
+    el.innerHTML='<b>Hoje: '+esc(day.w+' '+day.n+'/11')+'</b> · '+esc(day.where)+'. Toque em qualquer item para ver detalhes.';
+  }
+}
+
+function renderDays(){
+  const nav=document.getElementById('days');
+  nav.innerHTML=DAYS.map(x=>'<button class="dchip'+(x.d===TODAY?' today':'')+(x.d!=='2026-11-08'&&x.d!=='2026-11-22'?' city-it':'')+'" data-go="'+x.d+'"><span>'+x.w+'</span><strong>'+x.n+'</strong></button>').join('');
+  nav.addEventListener('click',e=>{
+    const b=e.target.closest('[data-go]'); if(!b) return;
+    showView('roteiro');
+    const t=document.getElementById('day-'+b.dataset.go);
+    if(t) t.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  });
+}
+
+function renderTimeline(){
+  const root=document.getElementById('v-roteiro');
+  root.innerHTML=DAYS.map((day,di)=>{
+    const items=day.items.map((it,ii)=>{
+      const chips=(it.codes||[]).map(c=>'<span class="chip">'+esc(c)+'</span>').join('')+(it.scans?'<span class="chip scanchip">'+(it.scans.length>1?it.scans.length+' códigos':'código')+' para escanear</span>':'');
+      const tm=esc(it.t||'');
+      return '<li class="item'+(it.key?' key':'')+(it.choice?' choice':'')+'"><div class="time">'+tm+'</div><div class="dot">'+ic(it.i)+'</div>'+
+        '<button class="card" data-d="'+di+'" data-i="'+ii+'"><h3>'+esc(it.title)+'</h3>'+(it.sub?'<p>'+esc(it.sub)+'</p>':'')+(chips?'<div class="chips">'+chips+'</div>':'')+'</button></li>';
+    }).join('');
+    return '<section class="day" id="day-'+day.d+'"><div class="dayhead"><h2>'+day.w+' '+day.n+' nov</h2><span class="where">'+esc(day.where)+'</span>'+(day.d===TODAY?'<span class="now-badge">hoje</span>':'')+'</div><ol class="items">'+items+'</ol></section>';
+  }).join('');
+  root.addEventListener('click',e=>{
+    const c=e.target.closest('.card'); if(!c) return;
+    openSheet(DAYS[c.dataset.d], DAYS[c.dataset.d].items[c.dataset.i]);
+  });
+}
+
+let lastFocus=null;
+function openSheet(day,it){
+  lastFocus=document.activeElement;
+  const s=document.getElementById('sheet');
+  let h='<button class="x" data-close aria-label="Fechar">✕</button><div class="k">'+esc(day.w+' '+day.n+' nov')+(it.t?' · '+esc(it.t):'')+'</div><h3 id="sheetTitle">'+esc(it.title)+'</h3>';
+  if(it.sub) h+='<p style="margin:-4px 0 10px;color:var(--muted)">'+esc(it.sub)+'</p>';
+  if(it.rows){h+='<dl>'+it.rows.map(r=>'<div class="row"><dt>'+esc(r[0])+'</dt><dd'+(r[2]?' class="code"':'')+'>'+esc(r[1])+'</dd></div>').join('')+'</dl>';}
+  if(it.notes) h+='<ul class="notes">'+it.notes.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul>';
+  h+='<div class="acts">';
+  (it.links||[]).forEach(l=>{h+='<a class="btn" href="'+esc(l[1])+'" target="_blank" rel="noopener">'+esc(l[0])+'</a>'});
+  h+='</div>';
+  s.innerHTML=h;
+  s._item=it;
+  document.getElementById('sheetBg').hidden=false;
+  document.body.style.overflow='hidden';
+  s.querySelector('[data-close]').focus();
+}
+function closeSheet(){
+  document.getElementById('sheetBg').hidden=true;
+  document.body.style.overflow='';
+  if(lastFocus) lastFocus.focus();
+}
+document.getElementById('sheetBg').addEventListener('click',e=>{
+  if(e.target.id==='sheetBg'||e.target.closest('[data-close]')) return closeSheet();
+  const cp=e.target.closest('[data-copy]'); if(cp) copy(cp.dataset.copy,cp);
+});
+
+function copy(text,btn){
+  const done=()=>{const o=btn.textContent;btn.textContent='Copiado';setTimeout(()=>btn.textContent=o,1400)};
+  try{navigator.clipboard.writeText(text).then(done,()=>fallback())}catch(e){fallback()}
+  function fallback(){const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(e){}t.remove()}
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('sheetBg').hidden) closeSheet();});
+
+function showView(v){
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.view===v));
+  ['roteiro','pendencias'].forEach(x=>document.getElementById('v-'+x).hidden=x!==v);
+  document.getElementById('days').style.display=v==='roteiro'?'':'none';
+}
+document.querySelector('.tabs').addEventListener('click',e=>{const t=e.target.closest('.tab');if(t){showView(t.dataset.view);window.scrollTo(0,0)}});
+
+renderStatus();renderDays();renderTimeline();
+if(TODAY>=DAYS[0].d&&TODAY<=DAYS[DAYS.length-1].d){
+  const t=document.getElementById('day-'+TODAY); if(t) setTimeout(()=>t.scrollIntoView({block:'start'}),100);
+}
+</script>
+</body>
+</html>
